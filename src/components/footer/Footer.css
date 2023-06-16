@@ -1,0 +1,25 @@
+.custom-footer {
+    background-color: #f2f2f2;
+    padding: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .footer-info {
+    margin-bottom: 10px;
+  }
+  
+  .footer-extra {
+    margin-bottom: 5px;
+  }
+  
+  .footer-extra a {
+    color: #1b7ae4;
+    text-decoration: none;
+  }
+  
+  .footer-extra a:hover {
+    text-decoration: underline;
+  }
+  

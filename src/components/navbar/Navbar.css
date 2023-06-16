@@ -1,0 +1,27 @@
+/* NAVBAR
+
+.navbar {
+    background-color: #0d0d0e;
+    padding: 20px 0;
+    box-shadow: 0px 4px 14px rgba(174, 72, 206, 0.6);
+    width: 100%;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.navbar-logo {
+    width: 25%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 2rem;
+} */

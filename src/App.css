@@ -1,0 +1,38 @@
+/* DOCUMENT */
+
+* {
+  box-sizing: border-box;
+}
+
+#root {
+  font-family: 'Poppins', sans-serif;
+  margin: 0 auto;
+  text-align: center;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+/* APP AREA */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content {
+  flex: 1;
+}
+
+/* LOADING SPINNER */
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  background-color: black;
+  align-items: center;
+  height: 90vh;
+}
