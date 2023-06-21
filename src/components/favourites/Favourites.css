@@ -1,0 +1,16 @@
+.favourites-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+    min-height: 65vh;
+  }
+  
+  @media (max-width: 768px) {
+    .favourites-container {
+      padding: 10px;
+      min-height: 50vh;
+    }
+  }
+  

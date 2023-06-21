@@ -1,15 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import SeasonSelector from '../seasonSelector/SeasonSelector';
-import Spinner from 'react-spinners/MoonLoader';
-import AudioPlayer from '../audio/audio'; // Import the AudioPlayer component
-import './SingleShowDetails.css';
+import React, { useEffect, useState } from "react";
+import SeasonSelector from "../seasonSelector/SeasonSelector";
+import MoonLoader from "react-spinners/MoonLoader";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import "./SingleShowDetails.css";
 
-export default function ShowDetails({ show, onGoBack }) {
+export default function ShowDetails({
+  show,
+  onGoBack,
+  toggleFavorite,
+  favoriteEpisodes,
+  playEpisode,
+}) {
+  // States
   const [showData, setShowData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedSeason, setSelectedSeason] = useState(1);
   const [selectedSeasonData, setSelectedSeasonData] = useState(null);
 
+  // Fetch a specific show's data from the API, and show on DOM
   useEffect(() => {
     const fetchShowDetails = async () => {
       try {
@@ -30,6 +38,7 @@ export default function ShowDetails({ show, onGoBack }) {
     fetchShowDetails();
   }, [show]);
 
+  // Once show's data available, find the seasons of that show
   useEffect(() => {
     if (showData) {
       const seasonData = showData.seasons.find(
@@ -39,63 +48,113 @@ export default function ShowDetails({ show, onGoBack }) {
     }
   }, [selectedSeason, showData]);
 
+  // Handles the selection of a season's data in a show, and sets it to state
   const handleSelectSeason = (seasonNumber) => {
     setSelectedSeason(seasonNumber);
+    if (showData) {
+      const seasonData = showData.seasons.find(
+        (season) => season.season === seasonNumber
+      );
+      setSelectedSeasonData({ ...seasonData });
+    }
   };
 
+  // Checks if a episode is in favorites, by using the composite key made from show ID, season number and episode number
+  // Used to determine if the heart icon should be filled or not
+  const episodeIsFavorited = (episode) => {
+    const compositeKey = `${showData.id}-${selectedSeasonData.season}-${episode.episode}`;
+    const episodeInFavorites = favoriteEpisodes.some(
+      (favEpisode) => favEpisode.compositeKey === compositeKey
+    );
+    return episodeInFavorites;
+  };
+
+  // Show loading spinner while loading shows data
   if (!showData) {
     return (
       <div className="loading-spinner">
-        <Spinner color="#1b7ae4" loading={loading} size={60} />
+        <MoonLoader color="#1b7ae4" loading={loading} size={60} />
       </div>
     );
   }
 
-  const { title, description, seasons, image } = showData;
+  // Destructure the field data of a show
+  const { title, description, seasons } = showData;
+
+  // Gets the season image and appends to DOM when selecting a season
+  const selectedSeasonImage =
+    seasons.find((season) => season.season === selectedSeason)?.image ||
+    showData.image;
 
   return (
     <div className="single-show-details">
-      <button className="go-back-btn" onClick={onGoBack}>
-        Go Back
-      </button>
-      <div>
-        <h3 className="show-title">{title}</h3>
-        <img className="single-show-image" src={image} alt={title} />
-        <p className="show-description">{description}</p>
+      {showData && (
+        <div>
+          <button className="go-back-btn" onClick={onGoBack}>
+            Go Back
+          </button>
+          <h3 className="show-title">{title}</h3>
+          <img
+            className="single-show-image"
+            src={selectedSeasonImage}
+            alt={title}
+          />
+          <p className="show-description">{description}</p>
 
-        <SeasonSelector
-          seasons={seasons}
-          selectedSeason={selectedSeason}
-          onSelectSeason={handleSelectSeason}
-        />
+          <SeasonSelector
+            seasons={seasons}
+            selectedSeason={selectedSeason}
+            onSelectSeason={handleSelectSeason}
+          />
 
-        {selectedSeasonData && (
-          <div>
-            <h4 className="selected-season-title">
-              {selectedSeasonData.title}
-            </h4>
-            <ul className="episode-list">
-              {selectedSeasonData.episodes.map((episode) => (
-                <li key={episode.episode} className="episode-item">
-                  <span className="episode-number-pill">
-                    EPISODE: {episode.episode}
-                  </span>
-                  <h5 className="episode-title">{episode.title}</h5>
-                  <p className="episode-description">{episode.description}</p>
-                  <audio controls>
-                    <source src="../../public/assets/audio/placeholder-audio.mp3" type="audio/mpeg" />
-                    Your browser does not support the audio element.
-                  </audio>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+          {selectedSeasonData && (
+            <>
+              <h4 className="selected-season-title">
+                {selectedSeasonData.title}
+              </h4>
+              <p className="season-episodes">
+                Episodes: {selectedSeasonData.episodes.length}
+              </p>
+              <ul className="episode-list">
+                {selectedSeasonData.episodes.map((episode) => (
+                  <li key={episode.episode} className="episode-item">
+                    <span className="episode-number-pill">
+                      EPISODE: {episode.episode}
+                    </span>
+                    <h5 className="episode-title">{episode.title}</h5>
+                    {episodeIsFavorited(episode) ? (
+                      <AiFillHeart
+                        className="favourite-icon"
+                        onClick={() =>
+                          toggleFavorite(episode, selectedSeasonData, showData)
+                        }
+                      />
+                    ) : (
+                      <AiOutlineHeart
+                        className="favourite-icon"
+                        onClick={() =>
+                          toggleFavorite(episode, selectedSeasonData, showData)
+                        }
+                      />
+                    )}
+                    <p className="episode-description">{episode.description}</p>
+                    <button
+                      className="play-button"
+                      onClick={() => playEpisode(episode)}
+                    >
+                      Play
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
 
-        <button className="go-back-btn" onClick={onGoBack}>
-          Go Back
-        </button>
-      </div>
+          <button className="go-back-btn" onClick={onGoBack}>
+            Go Back
+          </button>
+        </div>
+      )}
     </div>
   );
 }

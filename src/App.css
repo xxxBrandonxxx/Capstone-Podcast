@@ -2,6 +2,7 @@
 
 * {
   box-sizing: border-box;
+  background-color: black;
 }
 
 #root {
@@ -21,10 +22,14 @@ html, body, #root {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+
 }
 
 .content {
-  flex: 1;
+  max-width: 1280px;
+  flex: auto;
 }
 
 /* LOADING SPINNER */
@@ -32,7 +37,6 @@ html, body, #root {
 .loading-spinner {
   display: flex;
   justify-content: center;
-  background-color: black;
   align-items: center;
   height: 90vh;
 }

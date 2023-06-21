@@ -4,19 +4,14 @@
     align-items: center;
     padding: 20px;
     text-align: center;
-    background-color: #333;
-    border-radius: 10px;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-    color: #fff;
+    background-color: #000;
   }
-  
   
   .episode-number-pill {
     font-size: 10px;
     display: inline-block;
     padding: 4px 8px;
-    background-color: #fff;
+    background-color: #000000;
     color: #000;
     border-radius: 16px;
     font-weight: bold;
@@ -26,7 +21,6 @@
   .show-title {
     font-size: 32px;
     margin-bottom: 10px;
-    color: #fff;
   }
   
   .show-description {
@@ -36,16 +30,9 @@
   }
   
   .single-show-image {
-    max-width: 300px;
+    max-width: 600px;
     height: auto;
     margin-bottom: 20px;
-    border-radius: 25px;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-  }
-  
-  .single-show-image:hover {
-    transform: scale(1.05);
   }
   
   .season-selector {
@@ -56,16 +43,24 @@
     padding: 10px 20px;
     font-size: 16px;
     border: none;
-    background-color: #fff;
-    color: #000;
+    background-color: #ffffff;
+    color: #fff;
     cursor: pointer;
-    border-radius: 4px;
   }
   
   .selected-season-title {
     font-size: 24px;
     margin-bottom: 10px;
-    color: #fff;
+  }
+  
+  .season-episodes {
+    display: inline-block;
+    padding: 4px 8px;
+    background-color: #000000;
+    color: white;
+    border-radius: 16px;
+    font-weight: bold;
+    margin: 0 0 15px 0;
   }
   
   .episode-list {
@@ -73,30 +68,21 @@
     padding: 0;
     margin: 0;
     text-align: left;
-    border-radius: 10px;
+    border-radius: 20px;
     overflow: hidden;
   }
   
   .episode-item {
     margin-bottom: 20px;
     padding: 15px;
-    background-color: #000;
+    background-color: #000000;
     border-radius: 10px;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-    color: #fff;
-    cursor: pointer;
-  }
-  
-  .episode-item:hover {
-    transform: translateY(-3px);
   }
   
   .episode-title {
     font-size: 20px;
     margin-top: 10px;
     margin-bottom: 5px;
-    color: #fff;
   }
   
   .episode-description {
@@ -108,16 +94,65 @@
     margin: 25px 0px 20px 0px;
     font-size: 16px;
     border: none;
-    background-color: #fff;
-    color: #000;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    background-color: #1b7ae4;
+    color: #fff;
   }
   
-  .go-back-btn:hover {
-    background-color: #444;
-    color: #fff;
+  .favourite-icon {
+    cursor: pointer;
+    color: #663399;
+    font-size: 24px;
+  }
+  
+  @media (max-width: 768px) {
+    .single-show-details {
+      padding: 10px;
+    }
+  
+    .show-title {
+      font-size: 24px;
+    }
+  
+    .show-description {
+      font-size: 14px;
+    }
+  
+    .single-show-image {
+      max-width: 100%;
+      margin-bottom: 15px;
+    }
+  
+    .season-selector select {
+      padding: 8px 16px;
+      font-size: 14px;
+    }
+  
+    .selected-season-title {
+      font-size: 20px;
+    }
+  
+    .season-episodes {
+      padding: 2px 6px;
+      font-size: 10px;
+      margin-bottom: 10px;
+    }
+  
+    .episode-title {
+      font-size: 16px;
+      margin-bottom: 3px;
+    }
+  
+    .episode-description {
+      font-size: 12px;
+    }
+  
+    .go-back-btn {
+      margin: 20px 0px 15px 0px;
+      font-size: 14px;
+    }
+  
+    .favourite-icon {
+      font-size: 20px;
+    }
   }
   
