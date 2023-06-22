@@ -1,36 +1,36 @@
-import React, { useEffect, useRef } from 'react'; // Import React and other necessary dependencies
-import { useSelector } from 'react-redux'; // Import the useSelector hook from react-redux
-import './Player.css'; // Import the Player CSS file
+import React, { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
+import "./Player.css";
 
 const Player = () => {
-  // Get the selected episode from the Redux store
+  // Get the selectedEpisode from the Redux store
   const selectedEpisode = useSelector((state) => state.player.selectedEpisode);
 
-  // Create a reference to the audio element
+  // Create a reference for the audio element
   const audioRef = useRef(null);
 
-  // Update the audio source and play when the selected episode changes
+  // useEffect hook to handle changes in the selectedEpisode
   useEffect(() => {
+    // If a selectedEpisode exists
     if (selectedEpisode) {
+      // Set the audio source to the selected episode's file
       audioRef.current.src = selectedEpisode.file;
+      // Play the audio
       audioRef.current.play();
     }
   }, [selectedEpisode]);
 
-  // If no episode is selected, return null
+  // If no selectedEpisode is available, return null to render nothing
   if (!selectedEpisode) {
     return null;
   }
 
-  // Render the player component
+  // Render the player component with the selectedEpisode information
   return (
     <div className="player-container">
       <div className="player">
-        {/* Display the selected episode's title and description */}
         <h2>{selectedEpisode.title}</h2>
         <p>{selectedEpisode.description}</p>
-
-        {/* Audio player */}
         <audio id="audioPlayer" ref={audioRef} controls />
       </div>
     </div>
