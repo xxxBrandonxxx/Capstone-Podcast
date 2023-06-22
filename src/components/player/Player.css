@@ -1,3 +1,4 @@
+/* Customized player container */
 .player-container {
   position: fixed;
   bottom: 0;
@@ -7,6 +8,7 @@
   padding: 5px;
 }
 
+/* Customized player */
 .player {
   max-width: 600px;
   margin: 0 auto;
@@ -16,17 +18,44 @@
   color: #ffffff;
 }
 
+/* Customized audio player */
 .player audio {
   width: 100%;
+  /* Example styling for controls */
 }
 
+/* Example styling for play/pause button */
+.player audio::-webkit-media-controls-play-button {
+  background-color: #ffffff;
+  color: #1b1b1b;
+  border-radius: 50%;
+  padding: 10px;
+}
+
+/* Example styling for volume controls */
+.player audio::-webkit-media-controls-volume-slider {
+  background-color: #ffffff;
+}
+
+/* Example styling for progress bar */
+.player audio::-webkit-media-controls-timeline {
+  background-color: #ffffff;
+}
+
+/* Example styling for time display */
+.player audio::-webkit-media-controls-current-time-display,
+.player audio::-webkit-media-controls-time-remaining-display {
+  color: #ffffff;
+}
+
+/* Responsive layout adjustments */
 @media (max-width: 768px) {
   .player-container {
     position: static;
     width: auto;
     padding: 10px;
   }
-  
+
   .player {
     max-width: 100%;
   }

@@ -1,36 +1,28 @@
-import React, { useEffect, useState } from 'react'; // Import React and the necessary hooks
-import MoonLoader from 'react-spinners/MoonLoader'; // Import the MoonLoader component from react-spinners
-import { format } from 'date-fns'; // Import the format function from date-fns
-import { AiFillHeart } from 'react-icons/ai'; // Import the AiFillHeart icon from react-icons
+import React, { useEffect, useState } from 'react';
+import MoonLoader from 'react-spinners/MoonLoader';
+import { format } from 'date-fns';
+import { AiFillHeart, AiOutlineDelete } from 'react-icons/ai';
 
 const Favourites = ({ favoriteEpisodeIDs, toggleFavorite, playEpisode }) => {
-  // State for favorite episodes
   const [favoriteEpisodes, setFavoriteEpisodes] = useState([]);
-  // State for episode sorting
   const [sortBy, setSortBy] = useState('');
-  // State for typed filtering
   const [filterValue, setFilterValue] = useState('');
 
-  // Fetch favorite episodes data based on the composite key from favorites
   useEffect(() => {
     const fetchFavoriteEpisodes = async () => {
       const episodes = [];
 
-      // Loop through composite keys in favorites array
       for (let episode of favoriteEpisodeIDs) {
-        // Split composite key into individual parts
         const episodeIDs = episode.compositeKey.split('-');
         const showID = episodeIDs[0];
         const seasonID = episodeIDs[1];
         const episodeID = episodeIDs[2];
 
-        // Fetch and store show data in state
         try {
           const response = await fetch(`https://podcast-api.netlify.app/id/${showID}`);
           const data = await response.json();
           const seasonData = data.seasons.find((season) => season.season === parseInt(seasonID));
 
-          // Build object for favorite data
           const favObject = {
             key: episode.compositeKey,
             show: data,
@@ -51,13 +43,11 @@ const Favourites = ({ favoriteEpisodeIDs, toggleFavorite, playEpisode }) => {
     fetchFavoriteEpisodes();
   }, [favoriteEpisodeIDs]);
 
-  // Format the display of updated field data of a show into a human-readable format
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return format(date, 'd MMMM, yyyy');
   };
 
-  // Apply sorting logic based on the selected sorting option
   const applySorting = () => {
     let sortedEpisodes = [...favoriteEpisodes];
 
@@ -78,7 +68,6 @@ const Favourites = ({ favoriteEpisodeIDs, toggleFavorite, playEpisode }) => {
     applySorting();
   }, [sortBy]);
 
-  // Render a loading spinner if favorite episodes are not available yet
   if (!favoriteEpisodes) {
     return (
       <div className="loading-spinner">
@@ -109,12 +98,11 @@ const Favourites = ({ favoriteEpisodeIDs, toggleFavorite, playEpisode }) => {
             <p>{favorite.episode.description}</p>
             <p>Added to Favs: {formatDate(favorite.dateAdded)}</p>
             <p>Updated: {formatDate(favorite.show.updated)}</p>
-            {/* Add any other relevant information here */}
             <button className="play-button" onClick={() => playEpisode(favorite.episode)}>
               Play
             </button>
             <button onClick={() => toggleFavorite(favorite.episode, favorite.season, favorite.show)}>
-              <AiFillHeart />
+              {favorite.isFavorite ? <AiFillHeart /> : <AiOutlineDelete />} Delete
             </button>
           </div>
         ))}

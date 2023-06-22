@@ -1,36 +1,42 @@
+/* Updated styles for the season selector */
 .season-selector {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.season-selector label {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.season-selector select {
+  position: relative;
+  width: 310px;
+  border-radius: 5px;
+  background-color: #ffffff;
+  color: #ffffff;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z' fill='%23fff' /%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 25px;
+  transition: background-color 0.3s ease-in-out; /* Adding a smooth transition */
+}
+
+.season-selector select:hover {
+  background-color: #f0f0f0; /* Changing background color on hover */
+}
+
+/* Responsive layout adjustments */
+@media (max-width: 768px) {
+  .season-selector {
+    width: 100%;
   }
-  
-  .season-selector label {
-    font-size: 16px;
-    margin-bottom: 5px;
-  }
-  
+
   .season-selector select {
-    position: relative;
-    width: 310px;
-    border-radius: 5px;
-    background-color: #ffffff;
-    color: #ffffff;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z' fill='%23fff' /%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 8px center;
-    background-size: 25px;
+    width: 100%;
   }
-  
-  @media (max-width: 768px) {
-    .season-selector {
-      width: 100%;
-    }
-    
-    .season-selector select {
-      width: 100%;
-    }
-  }
-  
+}

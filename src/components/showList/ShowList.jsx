@@ -117,7 +117,7 @@ export default function ShowList({ onShowClick }) {
     <div className="show-list-container">
       {/* Sorting options */}
       <div className="sorting-options">
-        <label htmlFor="sortBy">Sort By:</label>
+        <label className="Fields" htmlFor="sortBy">Filter:</label>
         <select id="sortBy" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
           <option value="">Choose:</option>
           <option value="titleAsc">Title (A-Z)</option>
@@ -125,6 +125,8 @@ export default function ShowList({ onShowClick }) {
           <option value="recent">Most Recent Updated</option>
           <option value="leastRecent">Least Recent Updated</option>
         </select>
+        </div>
+        <div className='search-barr'>
         Search:
         <input
           type="text"

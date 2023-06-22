@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SeasonSelector from "../seasonSelector/SeasonSelector";
 import MoonLoader from "react-spinners/MoonLoader";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import "./SingleShowDetails.css";
 
 export default function ShowDetails({
@@ -59,8 +58,8 @@ export default function ShowDetails({
     }
   };
 
-  // Checks if a episode is in favorites, by using the composite key made from show ID, season number and episode number
-  // Used to determine if the heart icon should be filled or not
+  // Checks if an episode is in favorites, by using the composite key made from show ID, season number, and episode number
+  // Used to determine if the button should be filled or not
   const episodeIsFavorited = (episode) => {
     const compositeKey = `${showData.id}-${selectedSeasonData.season}-${episode.episode}`;
     const episodeInFavorites = favoriteEpisodes.some(
@@ -123,19 +122,23 @@ export default function ShowDetails({
                     </span>
                     <h5 className="episode-title">{episode.title}</h5>
                     {episodeIsFavorited(episode) ? (
-                      <AiFillHeart
-                        className="favourite-icon"
+                      <button
+                        className="favourite-button"
                         onClick={() =>
                           toggleFavorite(episode, selectedSeasonData, showData)
                         }
-                      />
+                      >
+                        favourite
+                      </button>
                     ) : (
-                      <AiOutlineHeart
-                        className="favourite-icon"
+                      <button
+                        className="favourite-button"
                         onClick={() =>
                           toggleFavorite(episode, selectedSeasonData, showData)
                         }
-                      />
+                      >
+                        add to favourite
+                      </button>
                     )}
                     <p className="episode-description">{episode.description}</p>
                     <button

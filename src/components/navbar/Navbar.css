@@ -14,6 +14,19 @@
   font-size: 13px;
 }
 
+.navbar-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 8rem;
+}
+
+.navbar-logo img {
+  max-width: 100%;
+  height: auto;
+}
+
+
 @media (max-width: 768px) {
   .footer {
     padding: 10px 0;
