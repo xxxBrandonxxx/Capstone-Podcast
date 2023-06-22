@@ -9,9 +9,11 @@ const Favourites = ({ favoriteEpisodeIDs, toggleFavorite, playEpisode }) => {
   const [filterValue, setFilterValue] = useState('');
 
   useEffect(() => {
+    // Fetch and set the favorite episodes when favoriteEpisodeIDs change
     const fetchFavoriteEpisodes = async () => {
       const episodes = [];
 
+      // Loop through each favorite episode ID
       for (let episode of favoriteEpisodeIDs) {
         const episodeIDs = episode.compositeKey.split('-');
         const showID = episodeIDs[0];
@@ -19,10 +21,12 @@ const Favourites = ({ favoriteEpisodeIDs, toggleFavorite, playEpisode }) => {
         const episodeID = episodeIDs[2];
 
         try {
+          // Fetch show details based on show ID
           const response = await fetch(`https://podcast-api.netlify.app/id/${showID}`);
           const data = await response.json();
           const seasonData = data.seasons.find((season) => season.season === parseInt(seasonID));
 
+          // Create a favorite episode object with relevant details
           const favObject = {
             key: episode.compositeKey,
             show: data,
@@ -43,11 +47,13 @@ const Favourites = ({ favoriteEpisodeIDs, toggleFavorite, playEpisode }) => {
     fetchFavoriteEpisodes();
   }, [favoriteEpisodeIDs]);
 
+  // Format the date string to a desired format
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return format(date, 'd MMMM, yyyy');
   };
 
+  // Apply sorting based on the selected sorting option
   const applySorting = () => {
     let sortedEpisodes = [...favoriteEpisodes];
 
@@ -69,6 +75,7 @@ const Favourites = ({ favoriteEpisodeIDs, toggleFavorite, playEpisode }) => {
   }, [sortBy]);
 
   if (!favoriteEpisodes) {
+    // Show a loading spinner if favoriteEpisodes is falsy
     return (
       <div className="loading-spinner">
         <MoonLoader color="#1b7ae4" loading={loading} size={60} />
@@ -76,6 +83,7 @@ const Favourites = ({ favoriteEpisodeIDs, toggleFavorite, playEpisode }) => {
     );
   }
 
+  // Render the favorite episodes
   return (
     <div>
       <h2>Welcome to your Favourites</h2>
