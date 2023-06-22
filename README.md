@@ -11,7 +11,7 @@ Each completed story that is verified by my lecturer will result in me receiving
 ---
 
 - [x] Project is deployed to a custom Netlify URL. Found under repo About section
-- [ ] All views in the app display correct on the smallest mobile devices available “Iphone SE”. This can be emulated in Chrome Dev tools.
+- [x] All views in the app display correct on the smallest mobile devices available “Iphone SE”. This can be emulated in Chrome Dev tools.
 - [x] All favicon information has been created an added correctly via [https://realfavicongenerator.net/](https://realfavicongenerator.net/) (you are welcome to use any free PNG image you find on [https://www.flaticon.com/](https://www.flaticon.com/))
 - [x] All metatag information has been creataed and added via [https://metatags.io/](https://metatags.io/) (You are welcome to use any free image you find on [https://unsplash.com/](https://unsplash.com/)). Be mindful to manually replace all URL values (especially image URL) to absolute Netlify URL values (you will need to deploy to Netlify first)
 
@@ -49,7 +49,7 @@ Each completed story that is verified by my lecturer will result in me receiving
 - [x] User is able to mark specific episodes as favourites so that they can find them again
 - [x] User can visit a view where they see all their favourites
 - [x] User is able to see the associated show and season when episode in favourite
-- [ ] Related by season/show epsiodes are grouped together in favourites
+- [x] Related by season/show epsiodes are grouped together in favourites
 - [x] User is able able to remove episodes from their favourites
 
 ---
@@ -72,6 +72,11 @@ Each completed story that is verified by my lecturer will result in me receiving
 ---
 
 - [X] Audio player is always visible so that user can listen to episodes while I browse
+
+
+
+
+//////////////////////////////////////////////////////
 - [ ] User receives a notification that confirms they want to close the page when audio is playing
 - [ ] App remembers what shows and episode user listened to last when returning to the platform
 - [ ] Automatically filters shows by a genre if the genre label is clicked on
