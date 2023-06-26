@@ -20,9 +20,13 @@ export default function ShowDetails({
   useEffect(() => {
     const fetchShowDetails = async () => {
       try {
+        console.info("Show SPinnenr")
         const response = await fetch(
           `https://podcast-api.netlify.app/id/${show}`
-        );
+        ).then((data) => {
+          console.info("DataHasbeen fetched")
+        });
+        console.info("hideSpinner")
         const data = await response.json();
         setShowData(data);
         setLoading(false);
