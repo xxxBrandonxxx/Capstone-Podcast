@@ -7,6 +7,7 @@ const Favourites = ({ favoriteEpisodeIDs, toggleFavorite, playEpisode }) => {
   const [favoriteEpisodes, setFavoriteEpisodes] = useState([]);
   const [sortBy, setSortBy] = useState('');
   const [filterValue, setFilterValue] = useState('');
+  const [loading, setLoading] = useState(true); // Indicates whether the data is being loaded
 
   useEffect(() => {
     // Fetch and set the favorite episodes when favoriteEpisodeIDs change

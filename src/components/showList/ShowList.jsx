@@ -11,22 +11,24 @@ import { format } from "date-fns";
 import "./ShowList.css";
 
 function ShowList({ onShowClick }) {
-  const [shows, setShows] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [visibleShows, setVisibleShows] = useState(12);
-  const [sortBy, setSortBy] = useState(""); 
-  const [filterValue, setFilterValue] = useState("");
-  const [carouselShows, setCarouselShows] = useState([]);
+  // State variables
+  const [shows, setShows] = useState([]); // Holds the list of shows
+  const [loading, setLoading] = useState(true); // Indicates whether the data is being loaded
+  const [loadingMore, setLoadingMore] = useState(false); // Indicates whether more shows are being loaded
+  const [visibleShows, setVisibleShows] = useState(12); // Number of shows visible
+  const [sortBy, setSortBy] = useState(""); // Sort criteria
+  const [filterValue, setFilterValue] = useState(""); // Filter value
+  const [carouselShows, setCarouselShows] = useState([]); // Shows for the carousel
 
+  // Fetch shows data on component mount
   useEffect(() => {
     const fetchShows = async () => {
       try {
         const response = await fetch("https://podcast-api.netlify.app/shows");
         const data = await response.json();
         setShows(data);
-        setLoading(false);
-        setCarouselShows(data.slice(0, visibleShows));
+        setLoading(false); // Set loading state to false after data is fetched
+        setCarouselShows(data.slice(0, visibleShows)); // Set initial carousel shows
       } catch (error) {
         console.error(
           "Issue fetching shows data. Please refresh and try again.",
@@ -38,6 +40,7 @@ function ShowList({ onShowClick }) {
     fetchShows();
   }, []);
 
+  // Update carousel shows and apply filters on changes in shows, filter value, and visible shows
   useEffect(() => {
     const filteredShows = shows.filter(
       (show) =>
@@ -48,6 +51,7 @@ function ShowList({ onShowClick }) {
     setCarouselShows(shuffledShows.slice(0, visibleShows));
   }, [shows, filterValue, visibleShows]);
 
+  // Sort shows based on the selected criteria
   useEffect(() => {
     let sortedShows = [...shows];
 
@@ -64,6 +68,7 @@ function ShowList({ onShowClick }) {
     setShows(sortedShows);
   }, [sortBy]);
 
+  // Show loading spinner if data is still being fetched
   if (loading) {
     return (
       <div className="loading-spinner">
@@ -72,6 +77,7 @@ function ShowList({ onShowClick }) {
     );
   }
 
+  // Handle show click event and remove clicked show from the carousel
   const handleShowClick = (showId) => {
     onShowClick(showId);
     setCarouselShows((prevCarouselShows) =>
@@ -79,6 +85,7 @@ function ShowList({ onShowClick }) {
     );
   };
 
+  // Load more shows
   const handleLoadMore = async () => {
     setLoadingMore(true);
 
@@ -93,6 +100,7 @@ function ShowList({ onShowClick }) {
     setLoadingMore(false);
   };
 
+  // Helper function to truncate text
   const clampText = (text, maxLength) => {
     if (text.length <= maxLength) {
       return text;
@@ -100,11 +108,13 @@ function ShowList({ onShowClick }) {
     return text.slice(0, maxLength) + "...";
   };
 
+  // Helper function to format date
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return format(date, "d MMMM, yyyy");
   };
 
+  // Mapping of genre IDs to genre names
   const genreMapping = {
     1: "Personal Growth",
     2: "Investigative Journalism",
@@ -117,6 +127,7 @@ function ShowList({ onShowClick }) {
     9: "Kids and Family",
   };
 
+  // Generate genre titles based on genre IDs
   const getGenreTitles = (genreIds) => {
     return genreIds.map((genreId) => (
       <span className="genre-pill" key={genreId}>
@@ -125,6 +136,7 @@ function ShowList({ onShowClick }) {
     ));
   };
 
+  // Render the component
   return (
     <div className="show-list-container">
       <div className="interested-in-text">You may be interested in...</div>
