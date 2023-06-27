@@ -31,7 +31,7 @@ const Player = () => {
       <div className="player">
         <h2>{selectedEpisode.title}</h2>
         <p>{selectedEpisode.description}</p>
-        <audio id="audioPlayer" ref={audioRef} controls />
+        <audio id="audioPlayer" ref={audioRef} controls autoPlay />
       </div>
     </div>
   );
