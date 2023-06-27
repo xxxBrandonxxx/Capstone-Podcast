@@ -3,12 +3,17 @@ import MoonLoader from "react-spinners/MoonLoader";
 import { format } from "date-fns";
 import { AiFillHeart } from "react-icons/ai";
 import "./Favourites.css";
+import Fuse from "fuse.js";
 
 const Favourites = ({ favoriteEpisodeIDs, toggleFavorite, playEpisode }) => {
   // State
   const [favoriteEpisodes, setFavoriteEpisodes] = useState([]);
   // State for the episode sorting
   const [sortBy, setSortBy] = useState("");
+  // State for search filter value
+  const [filterValue, setFilterValue] = useState("");
+  // State for search results
+  const [searchResults, setSearchResults] = useState([]);
 
   // Fetch favorite episodes data from the composite key that is saved in favorites. Made from show ID, season number, and episode number
   useEffect(() => {
@@ -93,6 +98,24 @@ const Favourites = ({ favoriteEpisodeIDs, toggleFavorite, playEpisode }) => {
     applySorting();
   }, [sortBy]);
 
+  // Search episodes based on the filter value
+  const searchEpisodes = () => {
+    if (filterValue.trim() === "") {
+      setSearchResults([]);
+    } else {
+      const options = {
+        keys: ["episode.title", "episode.description"],
+      };
+      const fuse = new Fuse(favoriteEpisodes, options);
+      const result = fuse.search(filterValue);
+      setSearchResults(result.map((item) => item.item));
+    }
+  };
+
+  useEffect(() => {
+    searchEpisodes();
+  }, [filterValue]);
+
   // Loading Spinner
   if (!favoriteEpisodes) {
     return (
@@ -120,38 +143,48 @@ const Favourites = ({ favoriteEpisodeIDs, toggleFavorite, playEpisode }) => {
           <option value="leastRecent">Least Recent Updated</option>
         </select>
       </div>
+      <div className="search-container">
+        <input
+          type="text"
+          placeholder="Search episodes"
+          value={filterValue}
+          onChange={(e) => setFilterValue(e.target.value)}
+        />
+      </div>
       <ul className="episode-list">
-        {favoriteEpisodes.map((favorite) => (
-          <div key={favorite.key} className="episode-item">
-            <h5 className="episode-fav-title">{favorite.episode.title}</h5>
-            <h6 className="show-title">{favorite.show.title}</h6>
-            <h6 className="selected-season-title">
-              Season: {favorite.season.season}
-            </h6>
-            <button
-              onClick={() =>
-                toggleFavorite(
-                  favorite.episode,
-                  favorite.season,
-                  favorite.show
-                )
-              }
-            >
-              Remove from fav
-            </button>
-            <p className="episode-description">
-              {favorite.episode.description}
-            </p>
-            <p>Added to Favs: {formatDate(favorite.dateAdded)}</p>
-            <p>Updated: {formatDate(favorite.show.updated)}</p>
-            <button
-              className="play-button"
-              onClick={() => playEpisode(favorite.episode)}
-            >
-              Play
-            </button>
-          </div>
-        ))}
+        {(searchResults.length > 0 ? searchResults : favoriteEpisodes).map(
+          (favorite) => (
+            <div key={favorite.key} className="episode-item">
+              <h5 className="episode-fav-title">{favorite.episode.title}</h5>
+              <h6 className="show-title">{favorite.show.title}</h6>
+              <h6 className="selected-season-title">
+                Season: {favorite.season.season}
+              </h6>
+              <button
+                onClick={() =>
+                  toggleFavorite(
+                    favorite.episode,
+                    favorite.season,
+                    favorite.show
+                  )
+                }
+              >
+                Remove from fav
+              </button>
+              <p className="episode-description">
+                {favorite.episode.description}
+              </p>
+              <p>Added to Favs: {formatDate(favorite.dateAdded)}</p>
+              <p>Updated: {formatDate(favorite.show.updated)}</p>
+              <button
+                className="play-button"
+                onClick={() => playEpisode(favorite.episode)}
+              >
+                Play
+              </button>
+            </div>
+          )
+        )}
       </ul>
     </div>
   );

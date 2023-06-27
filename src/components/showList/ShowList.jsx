@@ -1,34 +1,28 @@
 import React, { useState, useEffect } from "react";
-
-// Custom components
+import Fuse from "fuse.js";
 import Carousel from "../carousel/Carousel";
 import MoonLoader from "react-spinners/MoonLoader";
-
-// Third-party libraries
 import { format } from "date-fns";
-
-// CSS styles
 import "./ShowList.css";
 
 function ShowList({ onShowClick }) {
-  // State variables
-  const [shows, setShows] = useState([]); // Holds the list of shows
-  const [loading, setLoading] = useState(true); // Indicates whether the data is being loaded
-  const [loadingMore, setLoadingMore] = useState(false); // Indicates whether more shows are being loaded
-  const [visibleShows, setVisibleShows] = useState(12); // Number of shows visible
-  const [sortBy, setSortBy] = useState(""); // Sort criteria
-  const [filterValue, setFilterValue] = useState(""); // Filter value
-  const [carouselShows, setCarouselShows] = useState([]); // Shows for the carousel
+  const [shows, setShows] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [visibleShows, setVisibleShows] = useState(12);
+  const [sortBy, setSortBy] = useState("");
+  const [filterValue, setFilterValue] = useState("");
+  const [carouselShows, setCarouselShows] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
 
-  // Fetch shows data on component mount
   useEffect(() => {
     const fetchShows = async () => {
       try {
         const response = await fetch("https://podcast-api.netlify.app/shows");
         const data = await response.json();
         setShows(data);
-        setLoading(false); // Set loading state to false after data is fetched
-        setCarouselShows(data.slice(0, visibleShows)); // Set initial carousel shows
+        setLoading(false);
+        setCarouselShows(data.slice(0, visibleShows));
       } catch (error) {
         console.error(
           "Issue fetching shows data. Please refresh and try again.",
@@ -40,7 +34,6 @@ function ShowList({ onShowClick }) {
     fetchShows();
   }, []);
 
-  // Update carousel shows and apply filters on changes in shows, filter value, and visible shows
   useEffect(() => {
     const filteredShows = shows.filter(
       (show) =>
@@ -51,7 +44,6 @@ function ShowList({ onShowClick }) {
     setCarouselShows(shuffledShows.slice(0, visibleShows));
   }, [shows, filterValue, visibleShows]);
 
-  // Sort shows based on the selected criteria
   useEffect(() => {
     let sortedShows = [...shows];
 
@@ -68,16 +60,6 @@ function ShowList({ onShowClick }) {
     setShows(sortedShows);
   }, [sortBy]);
 
-  // Show loading spinner if data is still being fetched
-  if (loading) {
-    return (
-      <div className="loading-spinner">
-        <MoonLoader color="#1b7ae4" loading={loading} size={60} />
-      </div>
-    );
-  }
-
-  // Handle show click event and remove clicked show from the carousel
   const handleShowClick = (showId) => {
     onShowClick(showId);
     setCarouselShows((prevCarouselShows) =>
@@ -85,7 +67,6 @@ function ShowList({ onShowClick }) {
     );
   };
 
-  // Load more shows
   const handleLoadMore = async () => {
     setLoadingMore(true);
 
@@ -100,7 +81,6 @@ function ShowList({ onShowClick }) {
     setLoadingMore(false);
   };
 
-  // Helper function to truncate text
   const clampText = (text, maxLength) => {
     if (text.length <= maxLength) {
       return text;
@@ -108,13 +88,11 @@ function ShowList({ onShowClick }) {
     return text.slice(0, maxLength) + "...";
   };
 
-  // Helper function to format date
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return format(date, "d MMMM, yyyy");
   };
 
-  // Mapping of genre IDs to genre names
   const genreMapping = {
     1: "Personal Growth",
     2: "Investigative Journalism",
@@ -127,7 +105,6 @@ function ShowList({ onShowClick }) {
     9: "Kids and Family",
   };
 
-  // Generate genre titles based on genre IDs
   const getGenreTitles = (genreIds) => {
     return genreIds.map((genreId) => (
       <span className="genre-pill" key={genreId}>
@@ -136,7 +113,30 @@ function ShowList({ onShowClick }) {
     ));
   };
 
-  // Render the component
+  const fuseOptions = {
+    keys: ["title", "description"],
+    threshold: 0.3,
+  };
+
+  const fuse = new Fuse(shows, fuseOptions);
+
+  const searchShows = (value) => {
+    if (value.trim() === "") {
+      setSearchResults([]);
+    } else {
+      const results = fuse.search(value.trim()).map((result) => result.item);
+      setSearchResults(results);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="loading-spinner">
+        <MoonLoader color="#1b7ae4" loading={loading} size={60} />
+      </div>
+    );
+  }
+
   return (
     <div className="show-list-container">
       <div className="interested-in-text">You may be interested in...</div>
@@ -155,19 +155,22 @@ function ShowList({ onShowClick }) {
           <option value="recent">Most Recent Updated</option>
           <option value="leastRecent">Least Recent Updated</option>
         </select>
+        </div>
+
+        <div className="Search-Bars">
         Search:
         <input
           type="text"
           value={filterValue}
-          onChange={(e) => setFilterValue(e.target.value)}
+          onChange={(e) => {
+            setFilterValue(e.target.value);
+            searchShows(e.target.value);
+          }}
           placeholder="Filter by title"
         />
       </div>
       <div className="show-list">
-        {shows
-          .filter((show) =>
-            show.title.toLowerCase().includes(filterValue.toLowerCase())
-          )
+        {(filterValue.trim() === "" ? shows : searchResults)
           .slice(0, visibleShows)
           .map((show) => (
             <div
@@ -200,14 +203,12 @@ function ShowList({ onShowClick }) {
 
       {loadingMore ? (
         <div className="loading-spinner">
-          <MoonLoader color="#1b7ae4" loading={true} size={60} />
+          <MoonLoader color="#1b7ae4" loading={loadingMore} size={40} />
         </div>
       ) : (
-        visibleShows < shows.length && (
-          <div className="load-more-container">
-            <button className="load-more-button" onClick={handleLoadMore}>
-              Load More
-            </button>
+        visibleShows < (filterValue.trim() === "" ? shows.length : searchResults.length) && (
+          <div className="load-more" onClick={handleLoadMore}>
+            Load More
           </div>
         )
       )}

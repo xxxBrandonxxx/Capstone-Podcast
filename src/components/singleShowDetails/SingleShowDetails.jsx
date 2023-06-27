@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import SeasonSelector from "../seasonSelector/SeasonSelector";
 import MoonLoader from "react-spinners/MoonLoader";
+import Fuse from "fuse.js";
+import SeasonSelector from "../seasonSelector/SeasonSelector";
 import "./SingleShowDetails.css";
 
 export default function ShowDetails({
@@ -15,6 +16,8 @@ export default function ShowDetails({
   const [loading, setLoading] = useState(true);
   const [selectedSeason, setSelectedSeason] = useState(1);
   const [selectedSeasonData, setSelectedSeasonData] = useState(null);
+  const [filterValue, setFilterValue] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
   // Fetch a specific show's data from the API, and show on DOM
   useEffect(() => {
@@ -68,6 +71,24 @@ export default function ShowDetails({
     return episodeInFavorites;
   };
 
+  // Fuse.js options and initialization
+  const fuseOptions = {
+    keys: ["title", "description"],
+    threshold: 0.3,
+  };
+
+  const fuse = new Fuse(selectedSeasonData?.episodes || [], fuseOptions);
+
+  // Search episodes based on filter value
+  const searchEpisodes = (value) => {
+    if (value.trim() === "") {
+      setSearchResults([]);
+    } else {
+      const results = fuse.search(value.trim()).map((result) => result.item);
+      setSearchResults(results);
+    }
+  };
+
   // Show loading spinner while loading shows data
   if (!showData) {
     return (
@@ -106,6 +127,16 @@ export default function ShowDetails({
             onSelectSeason={handleSelectSeason}
           />
 
+          <input className="Search-episodes-bar"
+            type="text"
+            placeholder="Search episodes"
+            value={filterValue}
+            onChange={(e) => {
+              setFilterValue(e.target.value);
+              searchEpisodes(e.target.value);
+            }}
+          />
+
           {selectedSeasonData && (
             <>
               <h4 className="selected-season-title">
@@ -115,40 +146,95 @@ export default function ShowDetails({
                 Episodes: {selectedSeasonData.episodes.length}
               </p>
               <ul className="episode-list">
-                {selectedSeasonData.episodes.map((episode) => (
-                  <li key={episode.episode} className="episode-item">
-                    <span className="episode-number-pill">
-                      EPISODE: {episode.episode}
-                    </span>
-                    <h5 className="episode-title">{episode.title}</h5>
-                    {episodeIsFavorited(episode) ? (
-                      <button
-                        className="favourite-button"
-                        onClick={() =>
-                          toggleFavorite(episode, selectedSeasonData, showData)
-                        }
-                      >
-                        favourite
-                      </button>
-                    ) : (
-                      <button
-                        className="favourite-button"
-                        onClick={() =>
-                          toggleFavorite(episode, selectedSeasonData, showData)
-                        }
-                      >
-                        add to favourite
-                      </button>
-                    )}
-                    <p className="episode-description">{episode.description}</p>
-                    <button
-                      className="play-button"
-                      onClick={() => playEpisode(episode)}
-                    >
-                      Play
-                    </button>
-                  </li>
-                ))}
+                {filterValue.trim() === ""
+                  ? selectedSeasonData.episodes.map((episode) => (
+                      <li key={episode.episode} className="episode-item">
+                        <span className="episode-number-pill">
+                          EPISODE: {episode.episode}
+                        </span>
+                        <h5 className="episode-title">{episode.title}</h5>
+                        {episodeIsFavorited(episode) ? (
+                          <button
+                            className="favourite-button"
+                            onClick={() =>
+                              toggleFavorite(
+                                episode,
+                                selectedSeasonData,
+                                showData
+                              )
+                            }
+                          >
+                            favourite
+                          </button>
+                        ) : (
+                          <button
+                            className="favourite-button"
+                            onClick={() =>
+                              toggleFavorite(
+                                episode,
+                                selectedSeasonData,
+                                showData
+                              )
+                            }
+                          >
+                            add to favourite
+                          </button>
+                        )}
+                        <p className="episode-description">
+                          {episode.description}
+                        </p>
+                        <button
+                          className="play-button"
+                          onClick={() => playEpisode(episode)}
+                        >
+                          Play
+                        </button>
+                      </li>
+                    ))
+                  : searchResults.map((episode) => (
+                      <li key={episode.episode} className="episode-item">
+                        <span className="episode-number-pill">
+                          EPISODE: {episode.episode}
+                        </span>
+                        <h5 className="episode-title">{episode.title}</h5>
+                        {episodeIsFavorited(episode) ? (
+                          <button
+                            className="favourite-button"
+                            onClick={() =>
+                              toggleFavorite(
+                                episode,
+                                selectedSeasonData,
+                                showData
+                              )
+                            }
+                          >
+                            favourite
+                          </button>
+                        ) : (
+                          <button
+                            className="favourite-button"
+                            onClick={() =>
+                              toggleFavorite(
+                                episode,
+                                selectedSeasonData,
+                                showData
+                              )
+                            }
+                          >
+                            add to favourite
+                          </button>
+                        )}
+                        <p className="episode-description">
+                          {episode.description}
+                        </p>
+                        <button
+                          className="play-button"
+                          onClick={() => playEpisode(episode)}
+                        >
+                          Play
+                        </button>
+                      </li>
+                    ))}
               </ul>
             </>
           )}
