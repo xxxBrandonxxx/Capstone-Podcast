@@ -1,19 +1,16 @@
-import React from 'react';
-import Slider from 'react-slick';
-import './Carousel.css';
+import React from "react";
+import Slider from "react-slick";
+import "./Carousel.css";
 
-// Component for rendering a carousel of shows
-export default function ShowCarousel({ shows, onShowClick }) {
-  // Settings for the carousel
+export default function Carousel({ shows, onShowClick }) {
   const carouselSettings = {
-    dots: true, // Show navigation dots
-    infinite: true, // Loop through slides infinitely
-    speed: 500, // Transition speed in milliseconds
+    dots: true,
+    infinite: true,
+    speed: 500,
     slidesToShow: 5, // Number of slides to show at once
-    slidesToScroll: 3, // Number of slides to scroll at once
+    slidesToScroll: 3,
     responsive: [
       {
-        // Breakpoint for smaller screens
         breakpoint: 768,
         settings: {
           slidesToShow: 8, // Adjust the number of slides for smaller screens
@@ -22,10 +19,8 @@ export default function ShowCarousel({ shows, onShowClick }) {
     ],
   };
 
-  // Render the show carousel
   return (
     <Slider {...carouselSettings} className="show-carousel">
-      {/* Map through each show */}
       {shows.map((show) => (
         <div key={show.id} className="carousel-slide" onClick={() => onShowClick(show.id)}>
           <img className="carousel-image" src={show.image} alt={show.title} />
