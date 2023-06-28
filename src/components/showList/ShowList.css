@@ -1,17 +1,17 @@
 .show-list-container {
   width: 100%;
   min-height: calc(100vh - 20px);
-  margin: 5px;
+  margin: 10px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Align items to the left */
+  align-items: flex-start;
   cursor: pointer;
   background-color: #000000;
   background-repeat: no-repeat;
 }
 
-
-.fields{
+.fields {
   flex: auto;
 }
 
@@ -20,17 +20,17 @@
   background-color: black;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 25px;
-  justify-items: space-between; /* Align grid items in a "space-between" layout */
+  justify-items: space-between;
 }
 
 .show-card {
   flex-direction: column;
   justify-content: space-between;
-  padding: 0px;
+  padding: 10px;
   border: 1px solid #000000;
   border-radius: 10px;
-  display: flex; /* Ensure the card container behaves as a flex container */
-  justify-content: space-between; /* Align the card content in a "space-between" layout */
+  display: flex;
+  justify-content: space-between;
 }
 
 .show-image {
@@ -109,13 +109,14 @@
   justify-content: center;
   margin-top: 20px;
 }
-.search-barr {
+
+.search-bar {
   display: flex;
   align-items: center;
-  padding: 1rem;
+  padding: 10px;
 }
 
-.search-barr input {
+.search-bar input {
   width: 180px;
   padding: 8px;
   border-radius: 4px;
@@ -123,20 +124,19 @@
   color: #000000;
 }
 
-.search-barr button {
-  padding: 80px;
+.search-bar button {
+  padding: 8px;
   border-radius: 4px;
   background-color: #ffffff;
   color: #000000;
   margin-left: 8px;
 }
 
-
 .sorting-options {
   display: flex;
   align-items: center;
-  padding: 1rem;
-  width: 100%; /* Ensure the sorting options occupy the full width */
+  padding: 10px;
+  width: 100%;
 }
 
 .sorting-options label {
@@ -155,23 +155,10 @@
   color: #000000;
 }
 
-
-
 .loading-spinner {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100px;
   margin-top: 20px;
-}
-
-@media (max-width: 768px) {
-  .show-list-container {
-    margin: 10px;
-    min-height: calc(100vh - 30px);
-  }
-
-  .show-card {
-    border-radius: 8px;
-  }
 }

@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import "./ShowList.css";
 
 function ShowList({ onShowClick }) {
+  // State variables
   const [shows, setShows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -15,6 +16,7 @@ function ShowList({ onShowClick }) {
   const [carouselShows, setCarouselShows] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
 
+  // Fetch shows data on component mount
   useEffect(() => {
     const fetchShows = async () => {
       try {
@@ -34,6 +36,7 @@ function ShowList({ onShowClick }) {
     fetchShows();
   }, []);
 
+  // Update carousel shows and filter based on filterValue and visibleShows
   useEffect(() => {
     const filteredShows = shows.filter(
       (show) =>
@@ -44,6 +47,7 @@ function ShowList({ onShowClick }) {
     setCarouselShows(shuffledShows.slice(0, visibleShows));
   }, [shows, filterValue, visibleShows]);
 
+  // Sort shows based on sortBy value
   useEffect(() => {
     let sortedShows = [...shows];
 
@@ -60,6 +64,7 @@ function ShowList({ onShowClick }) {
     setShows(sortedShows);
   }, [sortBy]);
 
+  // Handle click on show card
   const handleShowClick = (showId) => {
     onShowClick(showId);
     setCarouselShows((prevCarouselShows) =>
@@ -67,6 +72,7 @@ function ShowList({ onShowClick }) {
     );
   };
 
+  // Load more shows
   const handleLoadMore = async () => {
     setLoadingMore(true);
 
@@ -81,6 +87,7 @@ function ShowList({ onShowClick }) {
     setLoadingMore(false);
   };
 
+  // Function to truncate text
   const clampText = (text, maxLength) => {
     if (text.length <= maxLength) {
       return text;
@@ -88,11 +95,13 @@ function ShowList({ onShowClick }) {
     return text.slice(0, maxLength) + "...";
   };
 
+  // Format the display of Updated field data of a show into a human-readable format
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return format(date, "d MMMM, yyyy");
   };
 
+  // Mapping of genre IDs to genre titles
   const genreMapping = {
     1: "Personal Growth",
     2: "Investigative Journalism",
@@ -105,6 +114,7 @@ function ShowList({ onShowClick }) {
     9: "Kids and Family",
   };
 
+  // Get genre titles based on genre IDs
   const getGenreTitles = (genreIds) => {
     return genreIds.map((genreId) => (
       <span className="genre-pill" key={genreId}>
@@ -113,13 +123,16 @@ function ShowList({ onShowClick }) {
     ));
   };
 
+  // Configuration for fuzzy searching using Fuse.js library
   const fuseOptions = {
     keys: ["title", "description"],
     threshold: 0.3,
   };
 
+  // Create a new instance of Fuse with shows and fuseOptions
   const fuse = new Fuse(shows, fuseOptions);
 
+  // Perform search based on input value
   const searchShows = (value) => {
     if (value.trim() === "") {
       setSearchResults([]);
@@ -129,10 +142,11 @@ function ShowList({ onShowClick }) {
     }
   };
 
+  // Render loading spinner while shows are being fetched
   if (loading) {
     return (
       <div className="loading-spinner">
-        <MoonLoader color="#1b7ae4" loading={loading} size={60} />
+        <MoonLoader color="#4ee138" loading={loading} size={60} />
       </div>
     );
   }
@@ -155,9 +169,9 @@ function ShowList({ onShowClick }) {
           <option value="recent">Most Recent Updated</option>
           <option value="leastRecent">Least Recent Updated</option>
         </select>
-        </div>
+      </div>
 
-        <div className="Search-Bars">
+      <div className="Search-Bars">
         Search:
         <input
           type="text"
@@ -203,10 +217,12 @@ function ShowList({ onShowClick }) {
 
       {loadingMore ? (
         <div className="loading-spinner">
-          <MoonLoader color="#1b7ae4" loading={loadingMore} size={40} />
+          <h1>Loading</h1>
+          <MoonLoader color="#4ee138" loading={loadingMore} size={40} />
         </div>
       ) : (
-        visibleShows < (filterValue.trim() === "" ? shows.length : searchResults.length) && (
+        visibleShows <
+          (filterValue.trim() === "" ? shows.length : searchResults.length) && (
           <div className="load-more" onClick={handleLoadMore}>
             Load More
           </div>
