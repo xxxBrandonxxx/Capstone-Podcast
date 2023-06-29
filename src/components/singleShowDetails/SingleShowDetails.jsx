@@ -94,7 +94,9 @@ export default function ShowDetails({
     return (
       <div className="loading-spinner">
         <h1>Loading</h1>
-        <MoonLoader color="#4ee138" loading={loading} size={60} />
+        <div>
+        <MoonLoader color="#1b7ae4" loading={loading} size={60} />
+        </div>
       </div>
     );
   }

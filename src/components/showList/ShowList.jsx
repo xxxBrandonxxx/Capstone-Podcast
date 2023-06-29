@@ -146,7 +146,10 @@ function ShowList({ onShowClick }) {
   if (loading) {
     return (
       <div className="loading-spinner">
-        <MoonLoader color="#4ee138" loading={loading} size={60} />
+        <h1>Loading</h1>
+        <div>
+        <MoonLoader color="#1b7ae4"  loading={loading} size={60} />
+        </div>
       </div>
     );
   }
@@ -217,9 +220,11 @@ function ShowList({ onShowClick }) {
 
       {loadingMore ? (
         <div className="loading-spinner">
-          <h1>Loading</h1>
-          <MoonLoader color="#4ee138" loading={loadingMore} size={40} />
+        <h1>Loading</h1>
+        <div>
+        <MoonLoader color="#1b7ae4" loading={loading} size={60} />
         </div>
+      </div>
       ) : (
         visibleShows <
           (filterValue.trim() === "" ? shows.length : searchResults.length) && (
