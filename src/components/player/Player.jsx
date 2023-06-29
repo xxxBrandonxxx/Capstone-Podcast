@@ -7,6 +7,7 @@ const Player = () => {
   const audioRef = useRef(null);
 
   useEffect(() => {
+    // Update audio source and play when selectedEpisode changes
     if (selectedEpisode) {
       audioRef.current.src = selectedEpisode.file;
       audioRef.current.play();
@@ -14,6 +15,7 @@ const Player = () => {
   }, [selectedEpisode]);
 
   const handleBeforeUnload = (e) => {
+    // Handle beforeunload event to prompt user when audio is playing
     if (audioRef.current && !audioRef.current.paused) {
       e.preventDefault();
       e.returnValue = ""; // This is required for Chrome compatibility
@@ -23,15 +25,18 @@ const Player = () => {
 
   useEffect(() => {
     const handleUnload = (e) => {
+      // Handle unload event to prompt user when audio is playing
       if (audioRef.current && !audioRef.current.paused) {
         e.preventDefault();
         e.returnValue = "Are you sure you want to close the player?";
       }
     };
 
+    // Add event listeners for beforeunload and unload events
     window.addEventListener("beforeunload", handleBeforeUnload);
     window.addEventListener("unload", handleUnload);
 
+    // Remove event listeners when component is unmounted
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
       window.removeEventListener("unload", handleUnload);

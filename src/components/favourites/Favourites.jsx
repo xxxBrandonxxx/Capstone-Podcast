@@ -120,11 +120,11 @@ const Favourites = ({ favoriteEpisodeIDs, toggleFavorite, playEpisode }) => {
   if (!favoriteEpisodes) {
     return (
       <div className="loading-spinner">
-      <h1>Loading</h1>
-      <div>
-      <MoonLoader color="#1b7ae4" loading={loading} size={60} />
+        <h1>Loading</h1>
+        <div>
+          <MoonLoader color="#1b7ae4" loading={loading} size={60} />
+        </div>
       </div>
-    </div>
     );
   }
 
