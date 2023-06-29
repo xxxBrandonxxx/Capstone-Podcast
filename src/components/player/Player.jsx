@@ -3,29 +3,45 @@ import { useSelector } from "react-redux";
 import "./Player.css";
 
 const Player = () => {
-  // Get the selectedEpisode from the Redux store
   const selectedEpisode = useSelector((state) => state.player.selectedEpisode);
-
-  // Create a reference for the audio element
   const audioRef = useRef(null);
 
-  // useEffect hook to handle changes in the selectedEpisode
   useEffect(() => {
-    // If a selectedEpisode exists
     if (selectedEpisode) {
-      // Set the audio source to the selected episode's file
       audioRef.current.src = selectedEpisode.file;
-      // Play the audio
       audioRef.current.play();
     }
   }, [selectedEpisode]);
 
-  // If no selectedEpisode is available, return null to render nothing
+  const handleBeforeUnload = (e) => {
+    if (audioRef.current && !audioRef.current.paused) {
+      e.preventDefault();
+      e.returnValue = ""; // This is required for Chrome compatibility
+      return ""; // This is required for other browsers compatibility
+    }
+  };
+
+  useEffect(() => {
+    const handleUnload = (e) => {
+      if (audioRef.current && !audioRef.current.paused) {
+        e.preventDefault();
+        e.returnValue = "Are you sure you want to close the player?";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("unload", handleUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("unload", handleUnload);
+    };
+  }, []);
+
   if (!selectedEpisode) {
     return null;
   }
 
-  // Render the player component with the selectedEpisode information
   return (
     <div className="player-container">
       <div className="player">
